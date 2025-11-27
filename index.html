@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tele Ole - Telegram Bot Management Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --telegram-blue: #0088cc;
+            --telegram-hover: #006699;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .btn-telegram {
+            background-color: var(--telegram-blue);
+            border-color: var(--telegram-blue);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-telegram:hover {
+            background-color: var(--telegram-hover);
+            border-color: var(--telegram-hover);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 136, 204, 0.3);
+        }
+        
+        .hero-section {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #37a2f7 0%, #37aeff 100%);
+            color: white;
+            margin-top: -1rem;
+            padding: 3rem 0;
+        }
+        
+        .hero-content {
+            z-index: 2;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .feature-card {
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--telegram-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card-clickable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card-clickable:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .feature-card-clickable:active {
+            transform: translateY(-8px) scale(1.01);
+        }
+        
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            z-index: 1000;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        #back-to-top.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .footer {
+            margin-top: 5rem;
+            padding: 2rem 0;
+        }
+        
+        .footer a {
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        
+        .footer a:hover {
+            transform: scale(1.2);
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: var(--telegram-blue);
+            color: white;
+        }
+        
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: var(--telegram-blue);
+        }
+        
+        .list-unstyled li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .list-unstyled li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--telegram-blue);
+            font-weight: bold;
+        }
+        
+        .section-spacing {
+            padding: 4rem 0;
+        }
+        
+        .bot-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .telegram-logo-display {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.3);
+            animation: rotate-scale 4s ease-in-out infinite;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .telegram-logo-display::before {
+            content: '';
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(248, 249, 250, 0.2));
+            animation: ripple 3s ease-in-out infinite;
+        }
+        
+        .telegram-logo-display i {
+            font-size: 200px;
+            color: #37a2f7;
+            z-index: 2;
+            filter: drop-shadow(0 10px 20px rgba(55, 162, 247, 0.4));
+        }
+        
+        @keyframes rotate-scale {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(5deg) scale(1.05);
+            }
+        }
+        
+        @keyframes ripple {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.3;
+            }
+        }
+        
+        .bot-placeholder {
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .bot-placeholder i {
+            font-size: 150px;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        .bot-logo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .telegram-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.5);
+            animation: pulse 2s infinite;
+            border: 4px solid white;
+        }
+        
+        .telegram-badge i {
+            font-size: 35px;
+            color: white;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 5px 15px rgba(0, 136, 204, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 20px rgba(0, 136, 204, 0.7);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fab fa-telegram-plane me-2"></i>Tele Ole</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#faq">FAQ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="display-3 fw-bold mb-4">Welcome to Tele Ole</h1>
+                  
+                </div>
+                <div class="col-lg-6">
+                    <div class="bot-image-container">
+                        <div class="telegram-logo-display">
+                            <i class="fab fa-telegram-plane"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-spacing">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">Manage Your Telegram Bots for Free!</h2>
+                <p class="fs-5 mb-4">Take control of your Telegram bots with our powerful and intuitive platform.</p>
+                <ul class="list-unstyled fs-5">
+                    <li class="mb-3"><strong>No Credit Card Required:</strong> Get started instantly without any upfront commitment.</li>
+                    <li class="mb-3"><strong>No Fees:</strong> We believe in transparent pricing - completely free to use.</li>
+                    <li class="mb-3"><strong>Easy Setup:</strong> Get your bot running in minutes, not hours.</li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-rocket" style="font-size: 200px; color: var(--telegram-blue); opacity: 0.8;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light section-spacing" id="services">
+        <div class="container">
+            <h2 class="text-center display-5 fw-bold mb-5">Our Services</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body feature-card">
+                            <i class="fas fa-code feature-icon"></i>
+                            <h5 class="card-title fw-bold">Bot Development</h5>
+                            <p class="card-text">We create custom Telegram bots tailored to your specific needs and requirements.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body feature-card">
+                            <i class="fas fa-cogs feature-icon"></i>
+                            <h5 class="card-title fw-bold">Bot Management</h5>
+                            <p class="card-text">We provide a comprehensive platform to manage and monitor your bots with ease.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body feature-card">
+                            <i class="fas fa-chart-line feature-icon"></i>
+                            <h5 class="card-title fw-bold">Bot Analytics</h5>
+                            <p class="card-text">Gain valuable insights into your bot's performance with our powerful analytics tools.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-spacing" id="features">
+        <h2 class="text-center display-5 fw-bold mb-5">Features</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm feature-card-clickable" data-feature="deepLinking">
+                    <div class="card-body feature-card">
+                        <i class="fas fa-link feature-icon"></i>
+                        <h5 class="card-title fw-bold">Deep Linking</h5>
+                        <p class="card-text">Learn how to use deep linking to create seamless experiences for your users.</p>
+                        <small class="text-muted">Click to learn more →</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm feature-card-clickable" data-feature="broadcasts">
+                    <div class="card-body feature-card">
+                        <i class="fas fa-broadcast-tower feature-icon"></i>
+                        <h5 class="card-title fw-bold">Broadcasts</h5>
+                        <p class="card-text">Discover how to send messages to a multitude of users at once efficiently.</p>
+                        <small class="text-muted">Click to learn more →</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm feature-card-clickable" data-feature="payments">
+                    <div class="card-body feature-card">
+                        <i class="fas fa-credit-card feature-icon"></i>
+                        <h5 class="card-title fw-bold">Payment Options</h5>
+                        <p class="card-text">Explore the different payment options available for monetizing your bot.</p>
+                        <small class="text-muted">Click to learn more →</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Detail Modal -->
+    <div class="modal fade" id="featureModal" tabindex="-1" aria-labelledby="featureModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title fw-bold" id="featureModalLabel">Feature Details</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="featureModalBody">
+                    <!-- Content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light section-spacing" id="faq">
+        <div class="container">
+            <h2 class="text-center display-5 fw-bold mb-5">Frequently Asked Questions</h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item mb-3 border-0 shadow-sm">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            What is Tele Ole?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" 
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Tele Ole is a comprehensive platform for managing and monitoring your Telegram bots. 
+                            We provide tools for bot development, management, and analytics to help you create 
+                            powerful automated experiences.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item mb-3 border-0 shadow-sm">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Is it free?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" 
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes! Our basic plan is completely free and does not require a credit card. 
+                            Get started today without any financial commitment.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item mb-3 border-0 shadow-sm">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Can I create my own bot?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" 
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Absolutely! We provide comprehensive tools, APIs, and documentation to help you 
+                            develop your own custom bots tailored to your specific needs.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-0 shadow-sm">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            How do I get started?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" 
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Simply click the "Get Started" button to connect with us on Telegram. 
+                            Our team will guide you through the setup process and help you create your first bot.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer bg-dark text-white text-center">
+        <div class="container">
+            <hr class="bg-white">
+            <p class="mb-0">&copy; 2025 Tele Ole. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <a href="#" id="back-to-top" class="btn btn-telegram btn-lg" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Feature details content
+        const featureContent = {
+            deepLinking: {
+                title: 'Deep Linking',
+                content: `
+                    <div class="p-3">
+                        <h4 class="mb-4">Unlocking the Power of Telegram Bots with Deep Linking</h4>
+                        <p class="lead">Telegram's deep linking functionality offers a powerful way to create seamless and personalized experiences for users by allowing developers to pass specific parameters to their bots through a unique URL.</p>
+                        
+                        <p>This mechanism can be harnessed for a variety of purposes, from tracking referral campaigns and customizing user onboarding to directing users to specific content.</p>
+                        
+                        <div class="alert alert-info mt-4">
+                            <h5><i class="fas fa-lightbulb me-2"></i>Use Cases</h5>
+                            <ul class="mb-0">
+                                <li>Track referral campaigns</li>
+                                <li>Customize user onboarding</li>
+                                <li>Direct users to specific content</li>
+                                <li>Create personalized experiences</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            broadcasts: {
+                title: 'Broadcasts',
+                content: `
+                    <div class="p-3">
+                        <h4 class="mb-4">Telegram Bot Broadcasts: A Direct Line to Your Audience</h4>
+                        <p class="lead">A Telegram bot broadcast is a powerful feature that allows you to send a single message to a multitude of users simultaneously.</p>
+                        
+                        <p>Unlike channels or groups, these messages are delivered individually to each user's private chat with the bot, creating a more personal and direct line of communication.</p>
+                        
+                        <p>This method is increasingly popular for businesses, content creators, and organizations looking to engage with their audience efficiently.</p>
+                        
+                        <div class="alert alert-success mt-4">
+                            <h5><i class="fas fa-check-circle me-2"></i>Benefits</h5>
+                            <ul class="mb-0">
+                                <li>Personal, one-on-one communication</li>
+                                <li>Reach thousands of users instantly</li>
+                                <li>Higher engagement rates</li>
+                                <li>Direct feedback from users</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            payments: {
+                title: 'Payment Options',
+                content: `
+                    <div class="p-3">
+                        <h4 class="mb-4">Payment Options for Your Telegram Bot</h4>
+                        <p class="lead">Explore various payment options available for your Telegram bots to monetize your services effectively.</p>
+                        
+                        <div class="row g-3 mt-3">
+                            <div class="col-md-6">
+                                <div class="card border-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-credit-card text-primary me-2"></i>Razorpay</h5>
+                                        <p class="card-text small">Popular payment gateway for Indian businesses with multiple payment methods.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fab fa-paypal text-primary me-2"></i>PayPal</h5>
+                                        <p class="card-text small">Global payment platform trusted by millions worldwide.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-wallet text-primary me-2"></i>OxaPay</h5>
+                                        <p class="card-text small">Cryptocurrency payment gateway for digital transactions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fab fa-telegram text-primary me-2"></i>Telegram Stars (XTR)</h5>
+                                        <p class="card-text small">Native Telegram currency for in-app purchases and transactions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-4">
+                            <h5><i class="fas fa-info-circle me-2"></i>Integration Support</h5>
+                            <p class="mb-0">We provide full integration support for all payment gateways. Get started with our comprehensive documentation and APIs.</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+        
+        // Show feature detail modal - Using event delegation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click event listeners to feature cards
+            const featureCards = document.querySelectorAll('.feature-card-clickable');
+            featureCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const feature = this.getAttribute('data-feature');
+                    if (feature && featureContent[feature]) {
+                        const content = featureContent[feature];
+                        document.getElementById('featureModalLabel').textContent = content.title;
+                        document.getElementById('featureModalBody').innerHTML = content.content;
+                        
+                        const modal = new bootstrap.Modal(document.getElementById('featureModal'));
+                        modal.show();
+                    }
+                });
+            });
+            
+            // Back to top button
+            const backToTopButton = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Smooth scroll for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#' && href !== '#back-to-top') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                            
+                            // Close mobile menu if open
+                            const navbarCollapse = document.querySelector('.navbar-collapse');
+                            if (navbarCollapse.classList.contains('show')) {
+                                const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                                if (bsCollapse) {
+                                    bsCollapse.hide();
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
