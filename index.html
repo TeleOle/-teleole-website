@@ -189,32 +189,18 @@
         .telegram-logo-display {
             width: clamp(200px, 50vw, 400px);
             height: clamp(200px, 50vw, 400px);
-            background: linear-gradient(135deg, #37a2f7 0%, #37aeff 100%);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 20px 60px rgba(55, 162, 247, 0.4);
-            animation: rotate-scale 4s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite;
             position: relative;
-            border: 3px solid rgba(55, 162, 247, 0.3);
-        }
-        
-        .telegram-logo-display::before {
-            content: '';
-            position: absolute;
-            width: calc(100% + 20px);
-            height: calc(100% + 20px);
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(55, 162, 247, 0.3), rgba(55, 174, 255, 0.2));
-            animation: ripple 3s ease-in-out infinite;
         }
         
         .telegram-logo-display i {
-            font-size: clamp(100px, 25vw, 200px);
-            color: white;
+            font-size: clamp(150px, 35vw, 300px);
+            color: #37a2f7;
             z-index: 2;
-            filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.4));
+            filter: drop-shadow(0 10px 30px rgba(55, 162, 247, 0.3));
         }
         
         @keyframes rotate-scale {
