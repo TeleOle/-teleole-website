@@ -44,8 +44,8 @@
             min-height: 70vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #37a2f7 0%, #37aeff 100%);
-            color: white;
+            background: white;
+            color: #37a2f7;
             margin-top: -1rem;
             padding: 3rem 1rem;
         }
@@ -57,6 +57,23 @@
         
         .hero-content {
             z-index: 2;
+        }
+        
+        /* Mobile: Logo on top, text below */
+        @media (max-width: 991px) {
+            .hero-section .row {
+                flex-direction: column-reverse;
+            }
+            
+            .hero-content {
+                order: 2;
+                text-align: center;
+            }
+            
+            .bot-image-container {
+                order: 1;
+                margin-bottom: 2rem;
+            }
         }
         
         .card {
@@ -172,15 +189,15 @@
         .telegram-logo-display {
             width: clamp(200px, 50vw, 400px);
             height: clamp(200px, 50vw, 400px);
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+            background: linear-gradient(135deg, #37a2f7 0%, #37aeff 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(55, 162, 247, 0.4);
             animation: rotate-scale 4s ease-in-out infinite;
             position: relative;
-            border: 3px solid rgba(255, 255, 255, 0.5);
+            border: 3px solid rgba(55, 162, 247, 0.3);
         }
         
         .telegram-logo-display::before {
@@ -189,15 +206,15 @@
             width: calc(100% + 20px);
             height: calc(100% + 20px);
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(248, 249, 250, 0.2));
+            background: linear-gradient(135deg, rgba(55, 162, 247, 0.3), rgba(55, 174, 255, 0.2));
             animation: ripple 3s ease-in-out infinite;
         }
         
         .telegram-logo-display i {
             font-size: clamp(100px, 25vw, 200px);
-            color: #37a2f7;
+            color: white;
             z-index: 2;
-            filter: drop-shadow(0 10px 20px rgba(55, 162, 247, 0.4));
+            filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.4));
         }
         
         @keyframes rotate-scale {
